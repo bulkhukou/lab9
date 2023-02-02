@@ -1,57 +1,41 @@
 #include <iostream>
-#include <cstring>
-#include "functions.h"
+#include <fstream>
 
-const char* flags[4] =
-        {
-        "--forward",
-        "--reverse",
-        "--file",
-        "--help"
-        };
+using std::cout;
+using std::cin;
 
-int main(int value, char ** arg) {
-    switch (value) {
-        case 1:
-            std::cerr << "##### Flags weren't read #####\n";
-            exit(1);
-        case 2:
-            if (strcmp(arg[1], flags[3]) == 0) {
-                exit(0);
-            }
-            if (strcmp(arg[1], flags[0]) == 0) {
-                std::cout << "Enter a mathematical expression in normalized form:\n>> ";
-                forward();
-            }
-            else if (strcmp(arg[1], flags[1]) == 0) {
-                std::cout << "Enter a mathematical expression in reverse polish notation form:\n>> ";
-                rpn();
-            }
-            else {
-                std::cerr << "##### Wrong flags #####\n";
-                exit(1);
-            }
-            break;
-        case 4:
-            if (strcmp(arg[1], flags[2]) == 0) {
-                char *filename = arg[2];
-                if (strcmp(arg[3], flags[0]) == 0) {
-                    std::cout << "A mathematical expression in normalized form\n";
-                    forward_f(filename);
-                }
-                else if (strcmp(arg[3], flags[1]) == 0) {
-                    std::cout << "A mathematical expression in reverse polish notation form\n";
-                    rpn_f(filename);
-                }
-            }
-            else {
-                std::cerr << "##### Wrong flags #####\n";
-                exit(1);
-            }
-            break;
-        default:
-            std::cerr << "##### Wrong flags #####\n";
-            exit(1);
+const int sz = 5;
+
+template <typename T> // шаблон
+void print(const std::string& sep, T arr[sz], std::ostream& out)  // sep - разделитель;  Т - массив размера sz
+{
+    for (int i = 0; i < sz - 1; ++i)
+    {
+        out << arr[i] << sep;
     }
-    exit(0);
+    out << arr[sz - 1] << '\n';
+}
+
+int main(int argc, char **argv)
+{
+    if (argc == 1) // если не было введено имя файла
+    {
+        std::cerr << "Enter the file name";
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        int arr_int[sz] = {1, 2, 3, 4, 5};
+        char arr_char[sz] = {'6', '7', '8', '9', '!'};
+
+        std::ofstream file_out;
+        file_out.open(argv[1]);
+
+        print<int>(" . ", arr_int, file_out);
+        print<char>("; ", arr_char, file_out);
+
+        file_out.close();
+
+    }
+    return 0;
 }
